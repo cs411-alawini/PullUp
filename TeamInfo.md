@@ -12,9 +12,8 @@
 | Member1     |   kevin2@illinois.edu  |
 | Member2     |    Bharati Kulkarni    |
 | Member2     |  bharati1@illinois.edu |
-| Member3     |                        |
-| Member3     |                        |
-
+| Member3     |   Sankar Gopalkrishna  |
+| Member3     |  sankarg2@illinois.edu |
 ## Project Information
 
 |   Info      |        Description     |
