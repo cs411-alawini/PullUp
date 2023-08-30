@@ -14,7 +14,8 @@
 | Member2     |  bharati1@illinois.edu |
 | Member3     |   Sankar Gopalkrishna  |
 | Member3     |  sankarg2@illinois.edu |
-| Member4     |  kornj2@illinois.edu   |
+| Member4     |    Korn Jiamsripong    |
+| Member4     |    kornj2@illinois.edu |
 ## Project Information
 
 |   Info      |        Description     |
