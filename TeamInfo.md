@@ -10,8 +10,6 @@
 | Captain     |  drana4@illinois.edu   |
 | Member1     |        Aditya Kunte    |
 | Member1     |   akunte2@illinois.edu |
-| Member2     |    Bharati Kulkarni    |
-| Member2     |  bharati1@illinois.edu |
 | Member3     |   Sankar Gopalkrishna  |
 | Member3     |  sankarg2@illinois.edu |
 | Member4     |    Korn Jiamsripong    |
