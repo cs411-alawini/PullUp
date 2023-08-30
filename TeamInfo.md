@@ -10,10 +10,10 @@
 | Captain     |  drana4@illinois.edu   |
 | Member1     |        Aditya Kunte    |
 | Member1     |   akunte2@illinois.edu |
-| Member3     |   Sankar Gopalkrishna  |
-| Member3     |  sankarg2@illinois.edu |
-| Member4     |    Korn Jiamsripong    |
-| Member4     |    kornj2@illinois.edu |
+| Member2     |   Sankar Gopalkrishna  |
+| Member2     |  sankarg2@illinois.edu |
+| Member3     |    Korn Jiamsripong    |
+| Member3     |    kornj2@illinois.edu |
 
 ## Project Information
 
