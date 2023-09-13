@@ -58,10 +58,10 @@ Triggers: To listen to changes in the database based on certain constraints (who
 ## DB schema (rough)
 
 ## Tables: 
-  Organization
-  Event 
-  UserProfile
-  OrgMembers
+  Organization,
+  Event, 
+  UserProfile,
+  OrgMembers,
   
 ## Attributes:
  Organization: OrgID (int), Name (char), Location (char), Social Media (char)
