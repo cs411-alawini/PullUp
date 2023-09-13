@@ -69,7 +69,9 @@ Triggers: To listen to changes in the database based on certain constraints (who
  UserProfile: UserName (char), userID (int), Location (char)
  OrgMembers: MemberName (char), userID (int)
 
-[insert image here]
+
+## Visual Mockup
+[Mockup image will be inserted here ]
 
 # Project Work Distribution:
 
