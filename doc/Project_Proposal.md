@@ -47,8 +47,7 @@ In order to enhance our UI, we aspire to create a Map UI that will enable users 
  OrgMembers: MemberName (char), userID (int)
 
 
-## Visual Mockup
-[Mockup image will be inserted here ]
+
 
 # Project Work Distribution:
 
@@ -65,6 +64,13 @@ In order to enhance our UI, we aspire to create a Map UI that will enable users 
 ## Testing and Documentation: Korn & Sankar
 
 ### Each team member will have specific responsibilities within their designated area, such as developing specific features or conducting tests. We will collaborate closely to ensure the successful implementation of Pull Up.
+
+
+
+## Visual Mockup
+
+
+![plot](./Pull_up_mockup.png)
 
 
 
