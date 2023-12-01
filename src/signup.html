@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .signup-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            width: 300px;
+        }
+        .signup-container h2 {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin: -20px -20px 20px -20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .btn {
+            background-color: red;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 48%;
+            display: inline-block; /* Adjusted for inline display */
+            margin: 2px;
+        }
+        .btn:hover {
+            background-color: darkred;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+
+        .submitbtn_container {
+            display: flex; /* Ensure flexbox is being used */
+            flex-direction: row; /* Align items in a row */
+            justify-content: space-between; /* Optional: Adjusts the spacing between buttons */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form  method="post">
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password">
+            </div>
+            <!-- Two separate buttons for different types of sign-up -->
+            <div class="submitbtn_container"> 
+                <button type="submit" class="btn">Sign Up as A User</button>
+                <button type="submit" class="btn">Sign Up as A Representative</button>
+            </div>
+        </form>
+        <div class="footer">
+            <a href="index.html">Already have an account? Log In</a> | <a href="forgot_pwd.html">Forgot Password?</a>
+        </div>
+    </div>
+</body>
+</html>
