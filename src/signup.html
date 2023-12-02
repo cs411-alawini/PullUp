@@ -50,7 +50,7 @@
             border-radius: 3px;
             cursor: pointer;
             width: 48%;
-            display: inline-block; /* Adjusted for inline display */
+            display: inline-block;
             margin: 2px;
         }
         .btn:hover {
@@ -63,9 +63,9 @@
         }
 
         .submitbtn_container {
-            display: flex; /* Ensure flexbox is being used */
-            flex-direction: row; /* Align items in a row */
-            justify-content: space-between; /* Optional: Adjusts the spacing between buttons */
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
         }
 
     </style>
@@ -74,15 +74,29 @@
     <div class="signup-container">
         <h2>Sign Up</h2>
         <form  method="post">
-            <!-- Two separate buttons for different types of sign-up -->
+         
             <div class="submitbtn_container"> 
-                <button type="submit" class="btn">Sign Up as A User</button>
-                <button type="submit" class="btn">Sign Up as A Representative</button>
+                <button type="button" id="userSignup" class="btn">Sign Up as A User</button>
+                <button type="button" id="repSignup" class="btn">Sign Up as A Representative</button>
             </div>
         </form>
         <div class="footer">
             <a href="index.html">Already have an account? Log In</a></a>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('userSignup').addEventListener('click', function() {
+                console.log("tapped userSignup");
+                // window.location.href = 'userSignupPage.html'; // URL for user sign-up
+            });
+        
+            document.getElementById('repSignup').addEventListener('click', function() {
+                console.log("tapped repSignup");
+                window.location.href = 'signup_rep_one.html'; // URL for representative sign-up
+            });
+        });
+    </script>
 </body>
 </html>

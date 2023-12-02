@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password</title>
+    <title>Sign Up Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
             height: 100vh;
             margin: 0;
         }
-        .password-reset-container {
+        .signup-container {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
@@ -22,7 +22,7 @@
             background-color: white;
             width: 300px;
         }
-        .password-reset-container h2 {
+        .signup-container h2 {
             background-color: red;
             color: white;
             text-align: center;
@@ -49,8 +49,9 @@
             border: none;
             border-radius: 3px;
             cursor: pointer;
-            width: 100%;
-            display: block;
+            width: 48%;
+            display: inline-block; 
+            margin: 2px;
         }
         .btn:hover {
             background-color: darkred;
@@ -60,44 +61,42 @@
             margin-top: 20px;
             font-size: 0.8em;
         }
-        .input-btn-style {
-            width: 95%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            color: black;
+
+        .submitbtn_container {
+            display: flex; 
+            flex-direction: row; 
+            justify-content: space-between; 
         }
+
     </style>
 </head>
 <body>
-    <div class="password-reset-container">
-        <h2>Reset Password</h2>
-        <p>Please enter your email address. We will send you an email to reset your password.</p>
-        <form method="post" onsubmit="handleResetPassword(event)">
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" class="input-btn-style">
+    <div class="signup-container">
+        <h2>Sign Up As A Representative</h2>
+        <form  method="post">
+           
+            <div class="submitbtn_container"> 
+                <button type="button" id="newOrg" class="btn">Create a New Organization</button>
+                <button type="button" id="existingOrg" class="btn">Sign Up as A Representative for an Existing Organization</button>
             </div>
-            <button type="submit" class="btn">Send Reset Link</button>
         </form>
         <div class="footer">
-            <a href="index.html">Back to Login</a>
+            <a href="index.html">Already have an account? Log In</a></a>
         </div>
     </div>
 
     <script>
-        function handleResetPassword(event) {
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('newOrg').addEventListener('click', function() {
+                // console.log("tapped newOrg");
+                window.location.href = 'signup_rep_neworg.html'; 
+            });
         
-            event.preventDefault();
-
-           
-            var email = document.getElementById('email').value;
-
-         
-            console.log("Reset password email: " + email);
-
-            
-        }
+            document.getElementById('existingOrg').addEventListener('click', function() {
+                console.log("tapped ExistingOrg");
+                window.location.href = 'signup_rep_existing.html';
+            });
+        });
     </script>
 </body>
 </html>

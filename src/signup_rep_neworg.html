@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create an Organization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            width: 400px;
+        }
+        .container h2 {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin: -20px -20px 20px -20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .btn {
+            background-color: red;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: darkred;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create an Organization</h2>
+        <form method="post">
+            <div class="form-group">
+                <label for="orgName">Organization Name</label>
+                <input type="text" id="orgName" name="orgName">
+            </div>
+            <div class="form-group">
+                <label for="orgType">Organization Type</label>
+                <select id="orgType" name="orgType">
+                    <option value="Technology">Technology</option>
+                    <option value="Education">Education</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Environmental">Environmental</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Food & Beverage">Food & Beverage</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Automotive">Automotive</option>
+                    <option value="Retail">Retail</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="orgLocation">Organization Location</label>
+                <input type="text" id="orgLocation" name="orgLocation">
+            </div>
+            <div class="form-group">
+                <label for="repName">Representative Name</label>
+                <input type="text" id="repName" name="repName">
+            </div>
+            <div class="form-group">
+                <label for="repContact">Representative Contact Number</label>
+                <input type="tel" id="repContact" name="repContact">
+            </div>
+            <button type="submit" class="btn">Create Organization</button>
+        </form>
+
+        <div class="footer">
+            <a href="index.html">Return to Login</a>
+        </div>
+    </div>
+</body>
+</html>
