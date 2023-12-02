@@ -1,6 +1,6 @@
 import os
 import pymysql
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, url_for, redirect
 import mysql.connector
 '''
 ClOUD_SQL_CONNECTION_NAME: cs411pineapple:us-central1:pineapplezone
@@ -10,15 +10,14 @@ password: @[4OljDzhKbv*H$m
 '''
 
 # Replace these values with your GCP MySQL instance details
-host = "34.28.107.237"
+host = "34.123.222.214"
 user = "root"
-password = "@[4OljDzhKbv*H$m"
+password = "password"
 database = "team_pineapple"
 
 # Create a connection to the MySQL instance
 
 app = Flask(__name__)
-
 
 def connect():
     try:
@@ -39,10 +38,27 @@ def closeConnection(connection):
         print("MySQL connection closed")
 
 
+def sendSQLQuery(query):
+    connection = connect()
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query)
+        connection.commit()
+        closeConnection(connection)
+    except mysql.connector.Error as e:
+        print(f"Error: {e}")
+        closeConnection(connection)
+    return
+
+
 @app.route("/")
 def index():
+  print("ACSC")
   return render_template("index.html")
 
+@app.route("/profile")
+def profile():
+  return render_template("profile.html")
 
 @app.route('/list', methods=['GET'])
 def list():
@@ -65,3 +81,16 @@ LIMIT 15;''')
         lis.append(row)
     closeConnection(connection)
     return lis
+
+
+@app.route('/update_profile', methods=['POST'])
+def update_profile():
+    if request.method == 'POST':
+        print("got here")
+        updated_email = request.form.get('email')
+        updated_preferences = request.form.get('preferences')
+        print(f"{updated_email} {updated_preferences}")
+        query = f'''UPDATE UserProfile
+                          SET Name = {updated_email}, Preferences = {updated_preferences}
+                          WHERE UserID = {user}'''
+        #sendSQLQuery(query)
