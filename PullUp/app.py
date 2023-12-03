@@ -97,6 +97,20 @@ def update_profile():
         #sendSQLQuery(query)
         return redirect(url_for('user_dashboard', username=username))
 
+@app.route('/register_rep_old_org', methods=['POST'])
+def register_rep_old_org():
+    print('do sql stuff')
+    #redirect to rep settings
+    return render_template('rep_setting.html')
+
+@app.route('/register_rep_new_org', methods=['POST'])
+def register_rep_new_org():
+    print('do sql stuff')
+    #redirect to rep settings
+    return render_template('rep_setting.html')
+
+
+
 @app.route('/login_user', methods=['POST'])
 def login():
     username = request.form.get('username') 
