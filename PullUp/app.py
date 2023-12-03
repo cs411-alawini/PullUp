@@ -87,6 +87,7 @@ LIMIT 15;''')
 def update_profile():
     if request.method == 'POST':
         print("got here")
+        username = request.form.get('username') #SIGNUP
         updated_email = request.form.get('email')
         updated_preferences = request.form.get('preferences')
         print(f"{updated_email} {updated_preferences}")
@@ -94,6 +95,7 @@ def update_profile():
                           SET Name = {updated_email}, Preferences = {updated_preferences}
                           WHERE UserID = {user}'''
         #sendSQLQuery(query)
+        return redirect(url_for('user_dashboard', username=username))
 
 @app.route('/login_user', methods=['POST'])
 def login():
