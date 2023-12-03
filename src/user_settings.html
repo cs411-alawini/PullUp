@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .signup-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            width: 300px;
+        }
+        .signup-container h2 {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin: -20px -20px 20px -20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .btn {
+            background-color: red;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%; 
+            margin: 2px 0; 
+        }
+        .btn:hover {
+            background-color: darkred;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Settings</h2>
+        <form id="settingsForm" onsubmit="updateName(event)">
+            <div class="form-group">
+                <label for="newFullName">New Full Name</label>
+                <input type="text" id="newFullName" name="newFullName">
+            </div>
+            <div class="submitbtn_container">
+                <button type="submit" class="btn">Update Name</button>
+            </div>
+        </form>
+        <div class="footer">
+            <a href="#">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function updateName(event) {
+            event.preventDefault();
+
+
+            var newFullName = document.getElementById('newFullName').value;
+
+
+            console.log('Updated Full Name:', newFullName);
+
+        }
+    </script>
+</body>
+</html>
