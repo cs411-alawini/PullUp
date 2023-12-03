@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Preferences</title>
+    <title>Create an Organization</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,15 +14,15 @@
             height: 100vh;
             margin: 0;
         }
-        .signup-container {
+        .container {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: white;
-            width: 300px;
+            width: 400px;
         }
-        .signup-container h1 {
+        .container h2 {
             background-color: red;
             color: white;
             text-align: center;
@@ -36,15 +36,11 @@
             display: block;
             margin-bottom: 5px;
         }
-        .form-group input {
-            width: 95%;
+        .form-group input, .form-group select {
+            width: 80%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 3px;
-        }
-        .form-group input::placeholder {
-            font-style: italic; /* Italicize the placeholder text */
-            opacity: 0.6; /* Make the placeholder text more transparent */
         }
         .btn {
             background-color: red;
@@ -66,23 +62,26 @@
     </style>
 </head>
 <body>
-    <div class="signup-container">
-        <h1>User Preferences</h1>
-
-        <form action="/update_profile" method="POST">
+    <div class="container">
+        <h2>Create an Organization</h2>
+        <form method="post">
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <label for="orgId">Organization Id</label>
+                <input type="text" id="orgId" name="orgId">
             </div>
-
             <div class="form-group">
-                <label for="preferences">Preferences (comma-separated):</label>
-                <input type="text" id="preferences" name="preferences" placeholder="Enter your preferences">
+                <label for="repName">Representative Name</label>
+                <input type="text" id="repName" name="repName">
             </div>
-            <button class="btn" type="submit">Save</button>
+            <div class="form-group">
+                <label for="repContact">Representative Contact Number</label>
+                <input type="tel" id="repContact" name="repContact">
+            </div>
+            <button type="submit" class="btn">Create Organization</button>
         </form>
+
         <div class="footer">
-            <a href="index.html">Already have an account? Log In</a></a>
+            <a href="index.html">Return to Login</a>
         </div>
     </div>
 </body>
