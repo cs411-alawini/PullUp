@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Preferences</title>
+    <title>Event Rating</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
             height: 100vh;
             margin: 0;
         }
-        .signup-container {
+        .rating-container {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
@@ -22,7 +22,7 @@
             background-color: white;
             width: 300px;
         }
-        .signup-container h1 {
+        .rating-container h2 {
             background-color: red;
             color: white;
             text-align: center;
@@ -36,15 +36,12 @@
             display: block;
             margin-bottom: 5px;
         }
-        .form-group input {
-            width: 95%;
+        .form-group select,
+        .form-group textarea {
+            width: 90%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 3px;
-        }
-        .form-group input::placeholder {
-            font-style: italic; /* Italicize the placeholder text */
-            opacity: 0.6; /* Make the placeholder text more transparent */
         }
         .btn {
             background-color: red;
@@ -54,36 +51,35 @@
             border-radius: 3px;
             cursor: pointer;
             width: 100%;
+            margin: 2px 0;
         }
         .btn:hover {
             background-color: darkred;
         }
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.8em;
-        }
     </style>
 </head>
 <body>
-    <div class="signup-container">
-        <h1>User Preferences</h1>
-
-        <form action="/update_profile" method="POST">
+    <div class="rating-container">
+        <h2>Provide Rating</h2>
+        <form method="post">
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <label for="numericRating">Numeric Rating</label>
+                <select id="numericRating" name="numericRating" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </div>
-
             <div class="form-group">
-                <label for="preferences">Preferences (comma-separated):</label>
-                <input type="text" id="preferences" name="preferences" placeholder="Enter your preferences">
+                <label for="comment">Comment</label>
+                <textarea id="comment" name="comment" rows="4"></textarea>
             </div>
-            <button class="btn" type="submit">Save</button>
+            <div class="submitbtn_container">
+                <button type="submit" class="btn">Submit Rating</button>
+            </div>
         </form>
-        <div class="footer">
-            <a href="index.html">Already have an account? Log In</a></a>
-        </div>
     </div>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Preferences</title>
+    <title>Forgot Password</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
             height: 100vh;
             margin: 0;
         }
-        .signup-container {
+        .password-reset-container {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
@@ -22,7 +22,7 @@
             background-color: white;
             width: 300px;
         }
-        .signup-container h1 {
+        .password-reset-container h2 {
             background-color: red;
             color: white;
             text-align: center;
@@ -42,10 +42,6 @@
             border: 1px solid #ccc;
             border-radius: 3px;
         }
-        .form-group input::placeholder {
-            font-style: italic; /* Italicize the placeholder text */
-            opacity: 0.6; /* Make the placeholder text more transparent */
-        }
         .btn {
             background-color: red;
             color: white;
@@ -54,6 +50,7 @@
             border-radius: 3px;
             cursor: pointer;
             width: 100%;
+            display: block;
         }
         .btn:hover {
             background-color: darkred;
@@ -63,27 +60,42 @@
             margin-top: 20px;
             font-size: 0.8em;
         }
+        .input-btn-style {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            color: black;
+        }
     </style>
 </head>
 <body>
-    <div class="signup-container">
-        <h1>User Preferences</h1>
-
-        <form action="/update_profile" method="POST">
+    <div class="password-reset-container">
+        <h2>Reset Password</h2>
+        <p>Please enter your email address. We will send you an email to reset your password.</p>
+        <form method="post" onsubmit="handleResetPassword(event)">
             <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="input-btn-style">
             </div>
-
-            <div class="form-group">
-                <label for="preferences">Preferences (comma-separated):</label>
-                <input type="text" id="preferences" name="preferences" placeholder="Enter your preferences">
-            </div>
-            <button class="btn" type="submit">Save</button>
+            <button type="submit" class="btn">Send Reset Link</button>
         </form>
         <div class="footer">
-            <a href="index.html">Already have an account? Log In</a></a>
+            <a href="index.html">Back to Login</a>
         </div>
     </div>
+
+    <script>
+        function handleResetPassword(event) {
+        
+            event.preventDefault();
+
+           
+            var email = document.getElementById('email').value;
+
+            console.log("Reset password email: " + email);
+            
+        }
+    </script>
 </body>
 </html>
