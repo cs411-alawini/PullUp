@@ -94,3 +94,12 @@ def update_profile():
                           SET Name = {updated_email}, Preferences = {updated_preferences}
                           WHERE UserID = {user}'''
         #sendSQLQuery(query)
+
+@app.route('/login_user', methods=['POST'])
+def login():
+    username = request.form.get('username') 
+    return redirect(url_for('user_dashboard', username=username))
+
+@app.route('/user_dashboard/<username>')
+def user_dashboard(username):
+    return render_template('user_dashboard.html', username=username)

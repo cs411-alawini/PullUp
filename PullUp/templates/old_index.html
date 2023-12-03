@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask App with List Button</title>
+</head>
+<body>
+    <h1>PullUp</h1>
+
+    <button id="listButton">List Organizations</button>
+
+    <p id="result"></p>
+
+    <script>
+        document.getElementById("listButton").addEventListener("click", function() {
+            fetch("/list")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+        });
+    </script>
+</body>
+</html>
