@@ -73,11 +73,11 @@
 <body>
     <div class="signup-container">
         <h2>Sign Up As A Representative</h2>
-        <form  method="post">
+        <form  id = "repRegisterForm" method="post">
            
             <div class="submitbtn_container"> 
-                <button type="button" id="newOrg" class="btn">Create a New Organization</button>
-                <button type="button" id="existingOrg" class="btn">Sign Up as A Representative for an Existing Organization</button>
+                <button type="button" class="btn" onclick="submitForm('new_org')">Create a New Organization</button>
+                <button type="button" class="btn" onclick="submitForm('old_org')">Sign Up as A Representative for an Existing Organization</button>
             </div>
         </form>
         <div class="footer">
@@ -86,17 +86,15 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('newOrg').addEventListener('click', function() {
-                // console.log("tapped newOrg");
-                window.location.href = 'signup_rep_neworg.html'; 
-            });
-        
-            document.getElementById('existingOrg').addEventListener('click', function() {
-                console.log("tapped ExistingOrg");
-                window.location.href = 'signup_rep_existing.html';
-            });
-        });
+        function submitForm(type) {
+            var form = document.getElementById('repRegisterForm');
+            if (type === 'new_org') {
+                form.action = "{{ url_for('rep_new_org') }}";
+            } else if (type === 'old_org') {
+                form.action = "{{ url_for('rep_old_org') }}";
+            }
+            form.submit();
+        }
     </script>
 </body>
 </html>

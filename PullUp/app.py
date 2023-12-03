@@ -120,4 +120,14 @@ def signup_rep():
     # Handle representative signup logic here
     return render_template('signup_rep_one.html')
 
+@app.route('/rep_new_org', methods=['POST'])
+def rep_new_org():
+    # Handle representative signup logic here
+    return render_template('signup_rep_neworg.html')
+
+@app.route('/rep_old_org', methods=['POST'])
+def rep_old_org():
+    # Handle representative signup logic here
+    return render_template('signup_rep_existing.html')
+
 
