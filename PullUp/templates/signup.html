@@ -73,30 +73,28 @@
 <body>
     <div class="signup-container">
         <h2>Sign Up</h2>
-        <form  method="post">
+        <form  id = "signupForm" method="post">
          
             <div class="submitbtn_container"> 
-                <button type="button" id="userSignup" class="btn">Sign Up as A User</button>
-                <button type="button" id="repSignup" class="btn">Sign Up as A Representative</button>
+                <button type="button" class="btn" onclick="submitForm('user')">Sign Up as A User</button>
+                <button type="button" class="btn" onclick="submitForm('rep')">Sign Up as A Representative</button>
             </div>
         </form>
         <div class="footer">
-            <a href="index.html">Already have an account? Log In</a></a>
+            <a href="/">Already have an account? Log In</a></a>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('userSignup').addEventListener('click', function() {
-                console.log("tapped userSignup");
-                window.location.href = 'profile.html'; // URL for user sign-up
-            });
-        
-            document.getElementById('repSignup').addEventListener('click', function() {
-                console.log("tapped repSignup");
-                window.location.href = 'signup_rep_one.html'; // URL for representative sign-up
-            });
-        });
+function submitForm(type) {
+        var form = document.getElementById('signupForm');
+        if (type === 'user') {
+            form.action = "{{ url_for('signup_user') }}";
+        } else if (type === 'rep') {
+            form.action = "{{ url_for('signup_rep') }}";
+        }
+        form.submit();
+    }
     </script>
 </body>
 </html>

@@ -103,3 +103,19 @@ def login():
 @app.route('/user_dashboard/<username>')
 def user_dashboard(username):
     return render_template('user_dashboard.html', username=username)
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+@app.route('/signup_user', methods=['POST'])
+def signup_user():
+    # Handle user signup logic here
+    return render_template('profile.html')
+
+@app.route('/signup_rep', methods=['POST'])
+def signup_rep():
+    # Handle representative signup logic here
+    return render_template('signup_rep_one.html')
+
+
