@@ -104,7 +104,19 @@ def update_profile():
         query = f'''INSERT INTO UserProfile (Name, Preferences, Contact) VALUES ('{name}', '{preferences}', '{email}')'''
         print(query)
         sendSQLQueryModify(query)
-        return redirect(url_for('index'))
+
+        get_user_id_query = '''SELECT UserID FROM UserProfile ORDER BY UserID DESC LIMIT 1'''
+        response = sendSQLQueryFetch(get_user_id_query)
+        print(response[0][0])
+        
+        user_id = response[0][0]
+
+        return redirect(url_for('give_user_id', user_id=user_id))
+
+@app.route('/give_user_id/<user_id>', methods=['POST', 'GET'])
+def give_user_id(user_id):
+
+    return render_template('give_user_id.html', user_id=user_id)
 
 @app.route('/register_rep_old_org', methods=['POST'])
 def register_rep_old_org():
