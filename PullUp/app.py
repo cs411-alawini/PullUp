@@ -15,6 +15,9 @@ user = "root"
 password = "password"
 database = "team_pineapple"
 
+
+
+
 # Create a connection to the MySQL instance
 
 app = Flask(__name__)
@@ -32,28 +35,37 @@ def connect():
     except mysql.connector.Error as e:
         print(f"Error: {e}")
 
-def closeConnection(connection):
+connection = connect()
+
+def closeConnection():
     if connection.is_connected():
         connection.close()
         print("MySQL connection closed")
 
 
-def sendSQLQuery(query):
-    connection = connect()
+def sendSQLQueryFetch(query):
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query)
+        return cursor.fetchall() #list of tuples 
+    except mysql.connector.Error as e:
+        print(f"Error: {e}")
+        
+
+def sendSQLQueryModify(query):
     cursor = connection.cursor()
     try:
         cursor.execute(query)
         connection.commit()
-        closeConnection(connection)
     except mysql.connector.Error as e:
         print(f"Error: {e}")
-        closeConnection(connection)
     return
+
+
 
 
 @app.route("/")
 def index():
-  print("ACSC")
   return render_template("index.html")
 
 @app.route("/profile")
@@ -86,16 +98,13 @@ LIMIT 15;''')
 @app.route('/update_profile', methods=['POST'])
 def update_profile():
     if request.method == 'POST':
-        print("got here")
-        username = request.form.get('username') #SIGNUP
-        updated_email = request.form.get('email')
-        updated_preferences = request.form.get('preferences')
-        print(f"{updated_email} {updated_preferences}")
-        query = f'''UPDATE UserProfile
-                          SET Name = {updated_email}, Preferences = {updated_preferences}
-                          WHERE UserID = {user}'''
-        #sendSQLQuery(query)
-        return redirect(url_for('user_dashboard', username=username))
+        name = request.form.get('username')
+        email = request.form.get('email')
+        preferences = request.form.get('preferences')
+        query = f'''INSERT INTO UserProfile (Name, Preferences, Contact) VALUES ('{name}', '{preferences}', '{email}')'''
+        print(query)
+        sendSQLQueryModify(query)
+        return redirect(url_for('index'))
 
 @app.route('/register_rep_old_org', methods=['POST'])
 def register_rep_old_org():
@@ -114,7 +123,21 @@ def register_rep_new_org():
 @app.route('/login_user', methods=['POST'])
 def login():
     username = request.form.get('username') 
-    return redirect(url_for('user_dashboard', username=username))
+    # validate here
+    # if its not valid
+    q = f"""
+    SELECT UserProfile.UserID
+    FROM UserProfile
+    WHERE UserProfile.UserID = {username}
+    """
+    rows = sendSQLQueryFetch(q)
+    if(rows is None):
+        return redirect(url_for('index'))
+    if(len(rows) == 0):
+        # no login exists
+        return redirect(url_for('signup'))
+    else:
+        return redirect(url_for('user_dashboard', username=username))
 
 @app.route('/user_dashboard/<username>')
 def user_dashboard(username):
