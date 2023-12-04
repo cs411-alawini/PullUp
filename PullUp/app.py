@@ -1,6 +1,6 @@
 import os
 import pymysql
-from flask import Flask, jsonify, render_template, request, url_for, redirect
+from flask import Flask, jsonify, render_template, request, url_for, redirect, flash
 import mysql.connector
 '''
 ClOUD_SQL_CONNECTION_NAME: cs411pineapple:us-central1:pineapplezone
@@ -21,6 +21,7 @@ database = "team_pineapple"
 # Create a connection to the MySQL instance
 
 app = Flask(__name__)
+app.secret_key = 'deez'
 
 def connect():
     try:
@@ -114,9 +115,59 @@ def register_rep_old_org():
 
 @app.route('/register_rep_new_org', methods=['POST'])
 def register_rep_new_org():
-    print('do sql stuff')
-    #redirect to rep settings
-    return render_template('rep_setting.html')
+    if request.method == 'POST':
+        org_name = request.form.get('orgName')
+        org_type = request.form.get('orgType')
+        org_location = request.form.get('orgLocation')
+        rep_name = request.form.get('repName')
+        rep_contact = request.form.get('repContact')
+
+        cursor = connection.cursor()
+        try:
+            # Insert into Organization table if not exists
+            insert_org_query = """
+                                INSERT INTO Organization (OrgName, OrgType, Location, ContactInfo)
+                                SELECT * FROM (SELECT %s AS OrgName, %s AS OrgType, %s AS Location, %s AS ContactInfo) AS tmp
+                                WHERE NOT EXISTS (
+                                    SELECT OrgName FROM Organization WHERE OrgName = %s
+                                ) LIMIT 1;
+                                """
+            cursor.execute(insert_org_query, (org_name, org_type, org_location, rep_contact, org_name))
+
+            if cursor.rowcount == 0:
+                connection.rollback()
+                flash("Organization/rep already exists", "warning")
+                return redirect(url_for('rep_new_org'))
+
+            org_id = cursor.lastrowid
+
+            # Insert into Representative table if not exists
+            insert_rep_query = """
+                                INSERT INTO Representative (OrgID, Name, Contact)
+                                SELECT * FROM (SELECT %s AS OrgID, %s AS Name, %s AS Contact) AS tmp
+                                WHERE NOT EXISTS (
+                                    SELECT 1 FROM Representative WHERE OrgID = %s AND Name = %s AND Contact = %s
+                                );
+                                """
+            cursor.execute(insert_rep_query, (org_id, rep_name, rep_contact, org_id, rep_name, rep_contact))
+
+            if cursor.rowcount == 0:
+                connection.rollback()
+                flash("Organization/rep already exists", "warning")
+                return redirect(url_for('rep_new_org'))
+            
+            repId =  cursor.lastrowid
+            connection.commit()
+            flash(f"Organization and Representative Registered Successfully. Your RepID is {repId}", "success")
+            return redirect(url_for('rep_new_org'))
+        except Exception as e:
+            connection.rollback()
+            print(f"An error occurred: {e}")
+            return f"An error occurred: {e}"
+        finally:
+            cursor.close()
+
+
 
 
 
@@ -138,6 +189,15 @@ def login():
         return redirect(url_for('signup'))
     else:
         return redirect(url_for('user_dashboard', username=username))
+    
+# @app.route('/login_rep', methods=['POST'])
+# def login():
+#     return redirect(url_for('user_dashboard', username="1"))
+@app.route('/login_rep')
+def lg_rep():
+    
+    return render_template('login_rep.html')
+
 
 @app.route('/user_dashboard/<username>')
 def user_dashboard(username):
@@ -157,7 +217,7 @@ def signup_rep():
     # Handle representative signup logic here
     return render_template('signup_rep_one.html')
 
-@app.route('/rep_new_org', methods=['POST'])
+@app.route('/rep_new_org', methods=['POST', 'GET'])
 def rep_new_org():
     # Handle representative signup logic here
     return render_template('signup_rep_neworg.html')
@@ -166,5 +226,3 @@ def rep_new_org():
 def rep_old_org():
     # Handle representative signup logic here
     return render_template('signup_rep_existing.html')
-
-

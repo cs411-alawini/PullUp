@@ -64,7 +64,17 @@
 <body>
     <div class="container">
         <h2>Create an Organization</h2>
-        <form action='/register_rep_new_org' method="post">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+
+        <form action='/register_rep_new_org' method="POST">
             <div class="form-group">
                 <label for="orgName">Organization Name</label>
                 <input type="text" id="orgName" name="orgName">
