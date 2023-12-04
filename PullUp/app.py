@@ -153,7 +153,7 @@ def login():
 
 @app.route('/user_dashboard/<username>')
 def user_dashboard(username):
-    return render_template('user_dashboard.html', username=username)
+    return render_template('user_dashboard.html', user_id=username)
 
 @app.route('/signup')
 def signup():

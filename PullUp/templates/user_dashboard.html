@@ -21,6 +21,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: white;
             width: 600px;
+            position: relative;
         }
         .signup-container h2 {
             background-color: red;
@@ -46,10 +47,17 @@
             color: blue;
             cursor: pointer;
         }
+        .user-id-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
     <div class="signup-container">
+        <div class="user-id-container">Your UserID: {{ user_id }}</div>
         <h2>Event Ratings</h2>
         <table>
             <tr>
