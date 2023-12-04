@@ -53,6 +53,11 @@
             left: 10px;
             color: #f2f2f2;
         }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +96,10 @@
             </tr>
 
         </table>
+
+        <div class="footer">
+            <a href="{{ url_for('user_setting', username=user_id) }}">Go To Settings</a>
+        </div>
     </div>
 </body>
 </html>
