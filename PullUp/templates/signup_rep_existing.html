@@ -59,9 +59,28 @@
             margin-top: 20px;
             font-size: 0.8em;
         }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 999;
+        }
+
+        #popup-text {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
+    <div id="popup" class="popup">
+        <span id="popup-text">Invalid Organization Id</span>
+    </div>
     <div class="container">
         <h2>Join an Organization</h2>
         <form action='/register_rep_old_org' method="post">
@@ -84,5 +103,14 @@
             <a href="/">Return to Login</a>
         </div>
     </div>
+    <script>
+        {% if error %}
+        var popup = document.getElementById('popup');
+        popup.style.display = 'block';
+        setTimeout(function () {
+            popup.style.display = 'none';
+        }, 1000);
+        {% endif %}
+    </script>
 </body>
 </html>

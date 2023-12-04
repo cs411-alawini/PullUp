@@ -105,13 +105,46 @@ def update_profile():
         query = f'''INSERT INTO UserProfile (Name, Preferences, Contact) VALUES ('{name}', '{preferences}', '{email}')'''
         print(query)
         sendSQLQueryModify(query)
-        return redirect(url_for('index'))
+
+        get_user_id_query = '''SELECT UserID FROM UserProfile ORDER BY UserID DESC LIMIT 1'''
+        response = sendSQLQueryFetch(get_user_id_query)
+        print(response[0][0])
+        
+        user_id = response[0][0]
+
+        return redirect(url_for('give_user_id', user_id=user_id))
+
+@app.route('/give_user_id/<user_id>', methods=['POST', 'GET'])
+def give_user_id(user_id):
+
+    return render_template('give_user_id.html', user_id=user_id)
 
 @app.route('/register_rep_old_org', methods=['POST'])
 def register_rep_old_org():
-    print('do sql stuff')
-    #redirect to rep settings
-    return render_template('rep_setting.html')
+    if request.method == 'POST':
+
+        orgId = request.form.get('orgId')
+        repName = request.form.get('repName')
+        repContact = request.form.get('repContact')
+
+        # Validate if there is an existing org, if there is not redirect to signup page?
+        query = f"""
+        SELECT Organization.OrgID
+        FROM Organization
+        WHERE Organization.OrgID = {orgId}
+        """
+        rows = sendSQLQueryFetch(query=query)
+
+        if len(rows) == 0 or not rows:
+            # no login exists
+            return render_template('signup_rep_existing.html', error = 1)
+        
+        # login exists so add to rep
+        query = f"INSERT INTO Representative (OrgID, Name, Contact) VALUES ('{orgId}', '{repName}', '{repContact}')"
+        sendSQLQueryModify(query=query)
+
+        # assuming we wanna pass something here? idk rep page
+        return render_template('rep_setting.html')
 
 @app.route('/register_rep_new_org', methods=['POST'])
 def register_rep_new_org():
@@ -201,7 +234,7 @@ def lg_rep():
 
 @app.route('/user_dashboard/<username>')
 def user_dashboard(username):
-    return render_template('user_dashboard.html', username=username)
+    return render_template('user_dashboard.html', user_id=username)
 
 @app.route('/signup')
 def signup():

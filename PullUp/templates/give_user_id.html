@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User ID Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .user-id-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            width: 300px;
+        }
+        .user-id-container h2 {
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin: -20px -20px 20px -20px;
+        }
+        .user-id {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background-color: red;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            width: 100%;
+            display: block;
+        }
+        .btn:hover {
+            background-color: darkred;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-id-container">
+        <h2>User ID Page</h2>
+        <div class="user-id">
+            <p>Your user ID is {{ user_id }}</p>
+        </div>
+        <div class="footer">
+            <a href="/">Return to Homepage</a>
+        </div>
+    </div>
+</body>
+</html>
