@@ -1,0 +1,10 @@
+CREATE TRIGGER UpdateEventPopularity 
+AFTER INSERT ON Rating
+FOR EACH ROW
+BEGIN
+    IF NEW.Rating >= 4 THEN 
+        UPDATE Events
+        SET Popularity = Popularity + 1
+        WHERE EventID = NEW.EventID;
+    END IF;
+END;

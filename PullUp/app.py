@@ -52,15 +52,30 @@ def sendSQLQueryFetch(query):
     except mysql.connector.Error as e:
         print(f"Error: {e}")
         
+def sendSQLQueryModifyV2(query, params):
+    cursor = connection.cursor()
+    try:
+        cursor.execute(query, params)
+        connection.commit()
+        return True
+    except mysql.connector.Error as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+
 
 def sendSQLQueryModify(query):
     cursor = connection.cursor()
     try:
         cursor.execute(query)
         connection.commit()
+        return 1
     except mysql.connector.Error as e:
         print(f"Error: {e}")
-    return
+        return 0
+    finally:
+        cursor.close()
 
 
 
@@ -246,7 +261,50 @@ def login_rep():
 
 @app.route('/user_dashboard/<username>')
 def user_dashboard(username):
-    return render_template('user_dashboard.html', user_id=username)
+    # Fetch user's name from the database
+    query = "SELECT Name FROM UserProfile WHERE UserID = %s;"
+    
+    try:
+        cursor = connection.cursor()
+        cursor.execute(query, (username,))
+        result = cursor.fetchone()  # Assuming username is unique and returns a single record
+        user_name = result[0] if result else "Unknown"
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        user_name = "Unknown"
+    finally:
+        cursor.close()
+
+    # Pass both username (UserID) and user's name to the template
+    return render_template('user_dashboard.html', user_id=username, user_name=user_name)
+
+
+@app.route('/user_settings/<username>')
+def user_setting(username):
+# Your logic here
+    return render_template('user_settings.html', user_id=username)
+
+@app.route('/update_user_name/<username>', methods=['POST'])
+def update_user_name(username):
+    new_name = request.form.get('newFullName')
+    user_id = username
+
+    # Use a parameterized query to prevent SQL injection
+    query = """
+            UPDATE UserProfile
+            SET Name = %s
+            WHERE UserID = %s;
+            """
+    try:
+        # Assuming sendSQLQueryModify is adapted to handle parameterized queries
+        sendSQLQueryModifyV2(query, (new_name, user_id))
+        flash(f"Name updated successfully to '{new_name}' | UserId: {user_id}", "success")
+    except Exception as e:
+        # Log the exception for debugging
+        print(f"Error during update: {e}")
+        flash(f"Error Update Failed", "warning")
+
+    return redirect(url_for('user_setting', username=user_id))
 
 @app.route('/rep_dashboard/<repID>', methods=['POST', 'GET'])
 def rep_dashboard(repID):

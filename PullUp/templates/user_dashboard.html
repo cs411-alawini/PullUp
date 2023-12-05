@@ -51,13 +51,18 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            color: #f2f2f2;
+            color: #030303;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
         }
     </style>
 </head>
 <body>
+    <div class="user-id-container">Your UserID: {{ user_id }} | Name: {{user_name}}</div>
     <div class="signup-container">
-        <div class="user-id-container">Your UserID: {{ user_id }}</div>
         <h2>Event Ratings</h2>
         <table>
             <tr>
@@ -91,6 +96,10 @@
             </tr>
 
         </table>
+
+        <div class="footer">
+            <a href="{{ url_for('user_setting', username=user_id) }}">Go To Settings</a>
+        </div>
     </div>
 </body>
 </html>

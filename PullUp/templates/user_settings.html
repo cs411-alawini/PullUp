@@ -65,7 +65,18 @@
 <body>
     <div class="signup-container">
         <h2>Settings</h2>
-        <form id="settingsForm" onsubmit="updateName(event)">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div id="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <form id="settingsForm" action="{{ url_for('update_user_name', username=user_id) }}" method="post">
             <div class="form-group">
                 <label for="newFullName">New Full Name</label>
                 <input type="text" id="newFullName" name="newFullName">
@@ -75,21 +86,9 @@
             </div>
         </form>
         <div class="footer">
-            <a href="#">Back to Home</a>
+            <a href="{{ url_for('user_dashboard', username=user_id) }}">Back to Home</a>
         </div>
     </div>
 
-    <script>
-        function updateName(event) {
-            event.preventDefault();
-
-
-            var newFullName = document.getElementById('newFullName').value;
-
-
-            console.log('Updated Full Name:', newFullName);
-
-        }
-    </script>
 </body>
 </html>

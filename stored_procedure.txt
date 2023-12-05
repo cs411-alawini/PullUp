@@ -1,0 +1,71 @@
+DELIMITER //
+
+CREATE PROCEDURE GenerateEventRecommendations(IN UserID INT)
+BEGIN
+    -- Create Recommendations table if not exists
+ 
+    -- Declaring variables and cursors
+    DECLARE done1 INT DEFAULT FALSE;
+    DECLARE done2 INT DEFAULT FALSE;
+    DECLARE Tag VARCHAR(25);
+    DECLARE curEventID INT;
+
+    -- Cursors must be declared before handler
+    DECLARE EventCursor CURSOR FOR 
+        SELECT ET.Tag
+        FROM Events E
+        JOIN EventTags ET ON E.EventID = ET.EventID
+        JOIN Rating R ON E.EventID = R.EventID
+        WHERE R.UserID = UserID AND R.Rating >= 4
+        GROUP BY ET.Tag;
+
+    -- Handler for NOT FOUND
+    DECLARE CONTINUE HANDLER FOR NOT FOUND 
+    BEGIN
+        SET done1 = TRUE;
+        SET done2 = TRUE;
+    END;
+
+    CREATE TABLE IF NOT EXISTS Recommendations (
+        RecommendationID INT PRIMARY KEY AUTO_INCREMENT,
+        UserID INT,
+        EventID INT,
+        UNIQUE KEY(UserID, EventID)
+    );
+
+
+    -- Opening cursor and looping through tags
+    OPEN EventCursor;
+    read_loop: REPEAT
+        FETCH EventCursor INTO Tag;
+        IF done1 THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Reset done2 for each new tag
+        SET done2 = FALSE;
+
+        -- Opening inner cursor and looping
+        OPEN EventRecommendationCursor;
+        event_loop: LOOP
+            FETCH EventRecommendationCursor INTO curEventID;
+            IF done2 THEN
+                LEAVE event_loop;
+            END IF;
+
+            -- Check if the recommendation already exists
+            IF NOT EXISTS (SELECT 1 FROM Recommendations WHERE UserID = UserID AND EventID = curEventID) THEN
+                INSERT INTO Recommendations (UserID, EventID)
+                VALUES (UserID, curEventID);
+            END IF;
+        END LOOP;
+        CLOSE EventRecommendationCursor;
+    UNTIL done1 END REPEAT;
+    CLOSE EventCursor;
+
+    -- Return the list of recommended events
+    SELECT * FROM Recommendations WHERE UserID = UserID;
+END;
+//
+
+DELIMITER ;
