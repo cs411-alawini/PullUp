@@ -20,14 +20,15 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             background-color: white;
-            width: 600px;
-            position: relative;
+            max-width: 800px; /* Adjusted the width for better responsiveness */
+            margin: 50px auto 20px; /* Centered the container and added more margin at the top */
+            overflow: auto; /* Added overflow property for scrolling if needed */
         }
         .signup-container h2 {
             background-color: red;
             color: white;
             text-align: center;
-            padding: 10px 0;
+            padding: 20px 0; /* Increased the top and bottom padding for better spacing */
             margin: -20px -20px 20px -20px;
         }
         table {
@@ -65,38 +66,47 @@
     <div class="signup-container">
         <h2>Event Ratings</h2>
         <table>
-            <tr>
-                <th>EventName</th>
-                <th>OrganizationID</th>
-                <th>EventTag</th>
-                <th>Rating</th>
-            </tr>
-            <tr>
-                <td>Event 1</td>
-                <td>Org 1</td>
-                <td>Tag A</td>
-                <td><a href="{{ url_for('give_rating') }}">Provide Rating</a></td>
-            </tr>
-
+            <thead>
+                <tr>
+                    <th>EventID</th>
+                    <th>EventName</th>
+                    <th>OrganizationName</th>
+                    <th>EventTags</th>
+                    <th>Event Popularity</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in table_data %}
+                    <tr>
+                        {% for value in row %}
+                            <td>{{ value, }}</td>
+                        {% endfor %}
+                        <td><a href="{{ url_for('give_rating') }}">Provide Rating</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
 
         <h3>Recommended events for you</h3>
-<table>
-    <tr>
-        <th>EventID</th>
-        <th>EventName</th>
-        <th>Location</th>
-    </tr>
-    {% for event in recommendations %}
-    <tr>
-        <td>{{ event[0] }}</td>
-        <td>{{ event[1] }}</td>
-        <td>{{ event[2] }}</td>
-    </tr>
-    {% endfor %}
-</table>
-
-   
+        <table>
+            <tr>
+                <th>EventID</th>
+                <th>EventName</th>
+                <th>OrganizationName</th>
+                <th>EventTags</th>
+                <th>Event Popularity</th>
+                <th>Rating</th>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>Event 2</td>
+                <td>Org 2</td>
+                <td>Tag B</td>
+                <td>0</td>
+                <td><a href="{{ url_for('give_rating') }}">Provide Rating</a></td>
+            </tr>
+        </table>
 
         <div class="footer">
             <a href="{{ url_for('user_setting', username=user_id) }}">Go To Settings</a>
