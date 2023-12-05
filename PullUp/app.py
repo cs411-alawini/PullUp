@@ -308,6 +308,20 @@ def update_user_name(username):
 
 @app.route('/rep_dashboard/<repID>', methods=['POST', 'GET'])
 def rep_dashboard(repID):
+    orgId = "unknown"
+    query = "SELECT OrgID FROM Representative WHERE RepID = %s;"
+
+    print("trynig to get ORgiD")
+    try:
+        cursor = connection.cursor()
+        cursor.execute(query, (repID,))
+        result = cursor.fetchone()  # Assuming username is unique and returns a single record
+        orgId = result[0] if result else "Unknown"
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        orgId = "Unknown"
+    finally:
+        cursor.close()
     if request.method == 'POST':
         data = request.get_json()
         eventName = data['eventName']
@@ -344,12 +358,18 @@ def rep_dashboard(repID):
             query = f"INSERT INTO EventTags (EventNum, Tag, EventName) VALUES ({eventID}, '{tag}', '{eventName}')"
             sendSQLQueryModify(query=query)
 
+       
+
+
     if 'success' in request.args:
-        return render_template('rep_setting.html', repID=repID, succ=request.args['success'])
+        print("success")
+        return render_template('rep_setting.html', repID=repID, orgID = orgId ,succ=request.args['success'])
     elif 'badd' in request.args:
+        print("bad")
         return render_template('rep_setting.html', repID=repID, badd=request.args['badd'])
     else:
-        return render_template('rep_setting.html', repID=repID)
+        print("idk what this is")
+        return render_template('rep_setting.html', repID=repID, orgID = orgId)
 
 @app.route('/signup')
 def signup():
