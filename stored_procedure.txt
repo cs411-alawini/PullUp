@@ -1,7 +1,6 @@
-
 DELIMITER //
 
-CREATE PROCEDURE GenerateEventRecommendationsV3(IN UserParam INT)
+CREATE PROCEDURE GenerateEventRecommendationsV4(IN UserParam INT)
 BEGIN
     
 
@@ -86,3 +85,8 @@ END;
 
 //
 DELIMITER ;
+
+
+
+
+
