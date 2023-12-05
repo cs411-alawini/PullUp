@@ -278,6 +278,12 @@ def user_dashboard(username):
     # Pass both username (UserID) and user's name to the template
     return render_template('user_dashboard.html', user_id=username, user_name=user_name)
 
+@app.route('/give_rating') #need userID and eventID
+def give_rating():
+    return render_template('rating.html')
+
+
+
 
 @app.route('/user_settings/<username>')
 def user_setting(username):
