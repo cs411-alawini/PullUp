@@ -263,7 +263,7 @@ def login_rep():
 def user_dashboard(username):
     # Fetch user's name from the database
     query = "SELECT Name FROM UserProfile WHERE UserID = %s;"
-    
+    recommendations = []
     try:
         cursor = connection.cursor()
         cursor.execute(query, (username,))
@@ -278,14 +278,20 @@ def user_dashboard(username):
         
 
         #get recommended events data (preference + events tag comparison)
+        cursor.callproc('GenerateEventRecommendationsV4', [username])
+        recommendations = []
+        for result in cursor.stored_results():
+            recommendations = result.fetchall()
     except mysql.connector.Error as e:
         print(f"Database error: {e}")
         user_name = "Unknown"
     finally:
         cursor.close()
 
+
+
     # Pass both username (UserID) and user's name to the template
-    return render_template('user_dashboard.html', user_id=username, user_name=user_name, table_data=event_result)
+    return render_template('user_dashboard.html', user_id=username, user_name=user_name, table_data=event_result,recommendations = recommendations)
 
 @app.route('/give_rating') #need userID and eventID
 def give_rating():

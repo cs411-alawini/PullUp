@@ -88,24 +88,20 @@
             </tbody>
         </table>
 
-        <h3>Recommended events for you</h3>
         <table>
+            <h3 style="text-align: center;">Recommended Events for You</h3>
             <tr>
                 <th>EventID</th>
                 <th>EventName</th>
-                <th>OrganizationName</th>
-                <th>EventTags</th>
-                <th>Event Popularity</th>
-                <th>Rating</th>
+                <th>Location</th>
             </tr>
+            {% for event in recommendations %}
             <tr>
-                <td>0</td>
-                <td>Event 2</td>
-                <td>Org 2</td>
-                <td>Tag B</td>
-                <td>0</td>
-                <td><a href="{{ url_for('give_rating') }}">Provide Rating</a></td>
+                <td>{{ event[0] }}</td>
+                <td>{{ event[1] }}</td>
+                <td>{{ event[2] }}</td>
             </tr>
+            {% endfor %}
         </table>
 
         <div class="footer">
