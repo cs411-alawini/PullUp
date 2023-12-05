@@ -150,12 +150,12 @@ def register_rep_old_org():
         """
         rows = sendSQLQueryFetch(query=query)
 
-        if len(rows) == 0 or not rows:
+        if not rows or len(rows) == 0:
             # no login exists
             return render_template('signup_rep_existing.html', error = 1)
         
-        # login exists so add to rep
-        query = f"INSERT INTO Representative (OrgID, Name, Contact) VALUES ('{orgId}', '{repName}', '{repContact}')"
+        # login exists so add to rep // assuming repcontact string
+        query = f"INSERT INTO Representative (OrgID, Name, Contact) VALUES ({orgId}, '{repName}', '{repContact}')"
         sendSQLQueryModify(query=query)
 
         # assuming we wanna pass something here? idk rep page
@@ -238,10 +238,25 @@ def login():
     else:
         return redirect(url_for('user_dashboard', username=username))
     
-@app.route('/login_rep')
-def lg_rep():
-    
-    return render_template('login_rep.html')
+# @app.route('/login_rep', methods=['POST'])
+# def login():
+#     return redirect(url_for('user_dashboard', username="1"))
+@app.route('/login_rep', methods=['POST', 'GET'])
+def login_rep():
+    if request.method == 'POST':
+        repId = request.form.get('repId') 
+        q = f"""
+        SELECT Representative.RepID
+        FROM Representative
+        WHERE Representative.RepID = {repId}
+        """
+        rows = sendSQLQueryFetch(q)
+        if rows is None or len(rows) == 0:
+            return render_template('login_rep.html', error=1)
+        else:
+            return redirect(url_for('rep_dashboard', repID=repId)) # add the id as well
+    else:
+        return render_template('login_rep.html')
 
 
 @app.route('/user_dashboard/<username>')
@@ -291,6 +306,51 @@ def update_user_name(username):
 
     return redirect(url_for('user_setting', username=user_id))
 
+@app.route('/rep_dashboard/<repID>', methods=['POST', 'GET'])
+def rep_dashboard(repID):
+    if request.method == 'POST':
+        data = request.get_json()
+        eventName = data['eventName']
+        location = data['location']
+        selectedEventTypes = data['selectedEventTypes']
+
+        # First query for representatives org id
+        q = f"""
+        SELECT OrgID
+        FROM Representative
+        WHERE RepID = {repID}
+        """
+        rows = sendSQLQueryFetch(q)
+        orgId = rows[0][0]
+        print(f'orgId: {orgId}')
+        # Then Create Event
+        query = f"INSERT INTO Events (OrgID, Location) VALUES ({orgId}, '{location}')"
+        sendSQLQueryModify(query=query)
+
+        # Find eventnum well a little sus but eh
+        q = f"""
+        SELECT EventID
+        FROM Events
+        WHERE OrgID = {orgId} AND Location = '{location}'
+        """
+        rows = sendSQLQueryFetch(q)
+        eventID = rows[0][0]
+        if (len(rows)) > 1:
+            print('oh well')
+        print(f'eventID: {eventID}')
+
+        #Then for every tag create an eventTag, i guess they all have the same name
+        for tag in selectedEventTypes:
+            query = f"INSERT INTO EventTags (EventNum, Tag, EventName) VALUES ({eventID}, '{tag}', '{eventName}')"
+            sendSQLQueryModify(query=query)
+
+    if 'success' in request.args:
+        return render_template('rep_setting.html', repID=repID, succ=request.args['success'])
+    elif 'badd' in request.args:
+        return render_template('rep_setting.html', repID=repID, badd=request.args['badd'])
+    else:
+        return render_template('rep_setting.html', repID=repID)
+
 @app.route('/signup')
 def signup():
     return render_template('signup.html')
@@ -314,3 +374,41 @@ def rep_new_org():
 def rep_old_org():
     # Handle representative signup logic here
     return render_template('signup_rep_existing.html')
+
+@app.route('/event_success/<repID>', methods=['GET'])
+def event_sucess(repID):
+    return redirect(url_for('rep_dashboard', repID=repID, success=True))
+
+
+# forms cannot have DELETE events at this time so shitty work around
+@app.route('/deleteEvent', methods=['GET', 'POST'])
+def deleteEvent():
+    if request.method == 'POST':
+        eventID = request.form.get('eventId')
+        repID = request.args['repID']
+        query = f"""
+        SELECT EventID
+        FROM Events
+        WHERE EventID = {eventID}
+        """
+        rows = sendSQLQueryFetch(query)
+        if rows and len(rows) != 0:
+            query = f"""
+            DELETE FROM Events
+            WHERE EventID = {eventID}
+            """
+            sendSQLQueryModify(query)
+            print("era")
+            return redirect(url_for('rep_dashboard', repID=repID, success=True))
+    return redirect(url_for('rep_dashboard', repID=repID, badd=True))
+
+@app.route('/dummy', methods=['GET'])
+def dummy():
+    q = f"""
+        SELECT *
+        FROM EventTags
+        WHERE EventNum = 1001
+        """
+    rows = sendSQLQueryFetch(q)
+    print(rows)
+    return render_template('index.html')

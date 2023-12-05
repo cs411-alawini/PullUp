@@ -61,19 +61,107 @@
             margin-top: 20px;
             font-size: 0.8em;
         }
+        .user-id-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #f2f2f2;
+        }
+        .signup-container {
+            /* Your existing styles here */
+            position: relative; /* Set position to relative */
+            flex-direction: column;
+        }
+
+        /* Styles for the search bar container */
+        .search-bar-container {
+            background-color: #f2f2f2; /* Background color for the search bar */
+            padding: 10px; /* Increase padding for larger size */
+            text-align: center; /* Center-align the search bar horizontally */
+            position: absolute; /* Set position to absolute */
+            top: 0; /* Position at the top */
+            left: 0; /* Position at the left */
+            width: 100%; /* Take up the full width of the container */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+        }
+
+        /* Styles for the search bar input */
+        .search-bar-container input[type="text"] {
+            width: 300px; /* Increase the width for a larger input field */
+            padding: 10px; /* Increase padding for a larger input field */
+            font-size: 16px; /* Increase font size for better visibility */
+            border: 2px solid #ccc; /* Increase border thickness */
+            border-radius: 5px; /* Increase border radius */
+            margin-right: 10px; /* Add some right margin for spacing */
+        }
+
+        /* Styles for the search button */
+        .search-bar-container button {
+            background-color: red;
+            color: white;
+            padding: 10px 20px; /* Increase padding for a larger button */
+            font-size: 16px; /* Increase font size for better visibility */
+            border: none;
+            border-radius: 5px; /* Increase border radius */
+            cursor: pointer;
+        }
+        .search-bar-text {
+            display: inline-block; /* Display as inline block to appear next to the input */
+            margin-right: 10px; /* Add right margin for spacing */
+            font-weight: bold; /* Optionally make the text bold */
+            font-size: 18px; /* Optionally adjust font size */
+        }
+        .selected-event-types {
+            max-height: 50px; /* Adjust the maximum height as needed */
+            overflow-y: auto; /* Enable vertical scrolling */
+            font-size: small;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 999;
+        }
+
+        #popup-text {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
+    <div class="search-bar-container">
+        <div class="search-bar-text">Find Current Events</div>
+        <input type="text" id="searchBar" placeholder="Search...">
+        <button type="button" onclick="searchEvents()">Search</button>
+    </div>
+    <div id="popup" class="popup">
+        <span id="popup-text">Action Successfully Completed</span>
+    </div>
+    <div id="errorPopup" class="popup" style="background-color: rgb(113, 35, 35);">
+        <span id="error-popup-text">Failed to complete action</span>
+    </div>
     <div class="signup-container">
-        <h2>Event Settings</h2>
+        <h2>Create Event</h2>
+        <h3>Your RepID: {{ repID }}</h3>
         <form id="eventForm" onsubmit="addEvent(event)">
+            <div class="form-group">
+                <label for="eventName">Event Name</label>
+                <input type="text" id="eventName" name="eventName" required>
+            </div>
             <div class="form-group">
                 <label for="location">Location</label>
                 <input type="text" id="location" name="location" required>
             </div>
             <div class="form-group">
                 <label for="eventType">Event Type</label>
-                <select id="eventType" name="eventType" required>
+                <select id="eventType" name="eventType"  required onchange ="addSelectedEventTypes()">
+                    <option value=""></option>
                     <option value="Lecture">Lecture</option>
                     <option value="Seminar">Seminar</option>
                     <option value="Workshop">Workshop</option>
@@ -119,15 +207,19 @@
                     <option value="Kayaking">Kayaking</option>
                     <option value="Fishing">Fishing</option>
                 </select>
+                <h5>Event Types Selected:</h5>
+                <button type="button" onclick="clearSelectedEventTypes()">Clear Selections</button>
+                <div id="selectedEventTypes" class="selected-event-types"></div>
             </div>
             <div class="submitbtn_container">
                 <button type="submit" class="btn">Add New Event</button>
             </div>
         </form>
 
-        <hr>
-
-        <form id="deleteEventForm" onsubmit="deleteEvent(event)">
+        <br><br>
+        
+        <form id="deleteEventForm" method="POST" action="/deleteEvent?repID={{repID}}">
+            <h2>Delete Event</h2>
             <div class="form-group">
                 <label for="eventId">Event ID to Delete</label>
                 <input type="text" id="eventId" name="eventId" required>
@@ -138,29 +230,100 @@
         </form>
 
         <div class="footer">
-            <a href="index.html">Back to Home</a>
+            <a href="/">Back to Home</a>
         </div>
     </div>
 
     <script>
+        {% if succ %}
+        var popup = document.getElementById('popup');
+        popup.style.display = 'block';
+        setTimeout(function () {
+            popup.style.display = 'none';
+        }, 1000);
+        {% endif %}
+        {% if badd %}
+        var popup = document.getElementById('errorPopup');
+        popup.style.display = 'block';
+        setTimeout(function () {
+            popup.style.display = 'none';
+        }, 1000);
+        {% endif %}
+        var selectedEventTypes = [];
+        function addSelectedEventTypes() {
+            var eventTypeSelect = document.getElementById('eventType');
+
+            const val = eventTypeSelect.selectedOptions[0].value;
+            index = selectedEventTypes.indexOf(val);
+            if (!val == "" && index === -1) {
+                selectedEventTypes.push(val);
+            }
+            console.log(eventTypeSelect.selectedOptions[0].value)
+
+        
+            var selectedEventTypesDiv = document.getElementById('selectedEventTypes');
+            selectedEventTypesDiv.innerHTML = '';
+            if (selectedEventTypes.length > 0) {
+                var ul = document.createElement('ul');
+            
+                for (var i = 0; i < selectedEventTypes.length; i++) {
+                    var li = document.createElement('li');
+                    li.textContent = selectedEventTypes[i];
+                    ul.appendChild(li);
+                }
+            
+                selectedEventTypesDiv.appendChild(ul);
+            }
+        }
         function addEvent(event) {
             event.preventDefault();
 
+            var eventName = document.getElementById('eventName').value;
             var location = document.getElementById('location').value;
-            var eventType = document.getElementById('eventType').value;
 
 
             console.log('Added New Event:', { location, eventType });
+            console.log(selectedEventTypes);
+
+            var eventData = {
+                eventName: eventName,
+                location: location,
+                selectedEventTypes: selectedEventTypes
+            };
+        
+            // Send the POST request using Fetch API
+            const route = '/rep_dashboard/' + `{{repID}}`
+            console.log(route)
+            fetch(route, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(eventData)
+            }).then(response => { window.location.href="/event_success/{{repID}}"});
+}
+
+        function clearSelectedEventTypes() {
+            selectedEventTypes = [];
+            var selectedEventTypesDiv = document.getElementById('selectedEventTypes');
+            selectedEventTypesDiv.innerHTML = '';
+            if (selectedEventTypes.length > 0) {
+                selectedEventTypesDiv.innerHTML = '<p>Selected Event Types:</p>';
+                var ul = document.createElement('ul');
+            
+                for (var i = 0; i < selectedEventTypes.length; i++) {
+                    var li = document.createElement('li');
+                    li.textContent = selectedEventTypes[i];
+                    ul.appendChild(li);
+                }
+            
+                selectedEventTypesDiv.appendChild(ul);
+            }
         }
 
-        function deleteEvent(event) {
-            event.preventDefault();
-
-            var eventId = document.getElementById('eventId').value;
-
-
-            console.log('Deleted Event with ID:', eventId);
-
+        function searchEvents() {
+            val = document.getElementById('searchBar').val;
+            // send request to some route to get something?
         }
     </script>
 </body>
