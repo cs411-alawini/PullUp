@@ -246,7 +246,23 @@ def lg_rep():
 
 @app.route('/user_dashboard/<username>')
 def user_dashboard(username):
-    return render_template('user_dashboard.html', user_id=username)
+    # Fetch user's name from the database
+    query = "SELECT Name FROM UserProfile WHERE UserID = %s;"
+    
+    try:
+        cursor = connection.cursor()
+        cursor.execute(query, (username,))
+        result = cursor.fetchone()  # Assuming username is unique and returns a single record
+        user_name = result[0] if result else "Unknown"
+    except mysql.connector.Error as e:
+        print(f"Database error: {e}")
+        user_name = "Unknown"
+    finally:
+        cursor.close()
+
+    # Pass both username (UserID) and user's name to the template
+    return render_template('user_dashboard.html', user_id=username, user_name=user_name)
+
 
 @app.route('/user_settings/<username>')
 def user_setting(username):
