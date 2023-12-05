@@ -1,6 +1,7 @@
+
 DELIMITER //
 
-CREATE PROCEDURE GenerateEventRecommendationsV2(IN UserParam INT)
+CREATE PROCEDURE GenerateEventRecommendationsV3(IN UserParam INT)
 BEGIN
     
 
@@ -70,7 +71,17 @@ BEGIN
     CLOSE EventCursor;
 
     -- Return the list of recommended events
-    SELECT * FROM Recommendations WHERE UserID = UserParam;
+    SELECT DISTINCT R.EventID, ET.EventName, E.Location
+    FROM 
+        Recommendations R
+    JOIN 
+        Events E ON R.EventID = E.EventID
+    JOIN 
+        EventTags ET ON E.EventID = ET.EventNum
+    WHERE 
+        R.UserID = UserParam
+    LIMIT 5;
+
 END;
 
 //

@@ -81,21 +81,22 @@
         </table>
 
         <h3>Recommended events for you</h3>
-        <table>
-            <tr>
-                <th>EventName</th>
-                <th>OrganizationID</th>
-                <th>EventTag</th>
-                <th>Rating</th>
-            </tr>
-            <tr>
-                <td>Event 2</td>
-                <td>Org 2</td>
-                <td>Tag B</td>
-                <td><a href="{{ url_for('give_rating') }}">Provide Rating</a></td>
-            </tr>
+<table>
+    <tr>
+        <th>EventID</th>
+        <th>EventName</th>
+        <th>Location</th>
+    </tr>
+    {% for event in recommendations %}
+    <tr>
+        <td>{{ event[0] }}</td>
+        <td>{{ event[1] }}</td>
+        <td>{{ event[2] }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
-        </table>
+   
 
         <div class="footer">
             <a href="{{ url_for('user_setting', username=user_id) }}">Go To Settings</a>
