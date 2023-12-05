@@ -269,6 +269,15 @@ def user_dashboard(username):
         cursor.execute(query, (username,))
         result = cursor.fetchone()  # Assuming username is unique and returns a single record
         user_name = result[0] if result else "Unknown"
+
+        #get general events data (most recent)
+        query = """(Select EventID,EventName, OrgName, Tag, COALESCE(EventPopularity, 0) as EventPopularity  FROM Events join EventTags ON EventID=EventNum JOIN Organization USING (OrgID) ORDER BY EventID DESC LIMIT 10) """
+        event_result = sendSQLQueryFetch(query)
+        print(event_result)
+
+        
+
+        #get recommended events data (preference + events tag comparison)
     except mysql.connector.Error as e:
         print(f"Database error: {e}")
         user_name = "Unknown"
@@ -276,7 +285,7 @@ def user_dashboard(username):
         cursor.close()
 
     # Pass both username (UserID) and user's name to the template
-    return render_template('user_dashboard.html', user_id=username, user_name=user_name)
+    return render_template('user_dashboard.html', user_id=username, user_name=user_name, table_data=event_result)
 
 @app.route('/give_rating') #need userID and eventID
 def give_rating():
