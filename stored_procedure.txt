@@ -1,9 +1,9 @@
 DELIMITER //
 
-CREATE PROCEDURE GenerateEventRecommendations(IN UserID INT)
+CREATE PROCEDURE GenerateEventRecommendationsV2(IN UserParam INT)
 BEGIN
-    -- Create Recommendations table if not exists
- 
+    
+
     -- Declaring variables and cursors
     DECLARE done1 INT DEFAULT FALSE;
     DECLARE done2 INT DEFAULT FALSE;
@@ -14,10 +14,16 @@ BEGIN
     DECLARE EventCursor CURSOR FOR 
         SELECT ET.Tag
         FROM Events E
-        JOIN EventTags ET ON E.EventID = ET.EventID
-        JOIN Rating R ON E.EventID = R.EventID
-        WHERE R.UserID = UserID AND R.Rating >= 4
+        JOIN EventTags ET ON E.EventID = ET.EventNum
+        JOIN Rating R ON E.EventID = R.EventIdentifier
+        WHERE R.UID = UserParam AND R.Rating >= 4
         GROUP BY ET.Tag;
+
+    DECLARE EventRecommendationCursor CURSOR FOR 
+        SELECT E.EventID
+        FROM Events E
+        JOIN EventTags ET ON E.EventID = ET.EventNum
+        WHERE ET.Tag = Tag;
 
     -- Handler for NOT FOUND
     DECLARE CONTINUE HANDLER FOR NOT FOUND 
@@ -26,13 +32,13 @@ BEGIN
         SET done2 = TRUE;
     END;
 
+    -- Create Recommendations table if not exists
     CREATE TABLE IF NOT EXISTS Recommendations (
         RecommendationID INT PRIMARY KEY AUTO_INCREMENT,
         UserID INT,
         EventID INT,
         UNIQUE KEY(UserID, EventID)
     );
-
 
     -- Opening cursor and looping through tags
     OPEN EventCursor;
@@ -42,11 +48,11 @@ BEGIN
             LEAVE read_loop;
         END IF;
 
-        -- Reset done2 for each new tag
+        -- Reset done2 for each new tag and open inner cursor
         SET done2 = FALSE;
-
-        -- Opening inner cursor and looping
         OPEN EventRecommendationCursor;
+
+        -- Inner loop for event recommendations
         event_loop: LOOP
             FETCH EventRecommendationCursor INTO curEventID;
             IF done2 THEN
@@ -54,9 +60,9 @@ BEGIN
             END IF;
 
             -- Check if the recommendation already exists
-            IF NOT EXISTS (SELECT 1 FROM Recommendations WHERE UserID = UserID AND EventID = curEventID) THEN
+            IF NOT EXISTS (SELECT 1 FROM Recommendations WHERE UserID = UserParam AND EventID = curEventID) THEN
                 INSERT INTO Recommendations (UserID, EventID)
-                VALUES (UserID, curEventID);
+                VALUES (UserParam, curEventID);
             END IF;
         END LOOP;
         CLOSE EventRecommendationCursor;
@@ -64,8 +70,8 @@ BEGIN
     CLOSE EventCursor;
 
     -- Return the list of recommended events
-    SELECT * FROM Recommendations WHERE UserID = UserID;
+    SELECT * FROM Recommendations WHERE UserID = UserParam;
 END;
-//
 
+//
 DELIMITER ;
