@@ -61,7 +61,7 @@
 <body>
     <div class="rating-container">
         <h2>Provide Rating</h2>
-        <form method="post">
+        <form method="post" action="{{ url_for('give_rating', user_id=user_id, event_id=event_id) }}">
             <div class="form-group">
                 <label for="numericRating">Numeric Rating</label>
                 <select id="numericRating" name="numericRating" required>

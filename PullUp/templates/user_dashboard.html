@@ -82,7 +82,7 @@
                         {% for value in row %}
                             <td>{{ value }}</td>
                         {% endfor %}
-                        <td><a href="{{ url_for('give_rating') }}">Provide Rating</a></td>
+                        <td><a href="{{ url_for('redirect_rating', event_id=row[0], user_id=user_id) }}">Provide Rating</a></td>
                     </tr>
                 {% endfor %}
             </tbody>

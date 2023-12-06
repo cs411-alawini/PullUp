@@ -274,7 +274,7 @@ def user_dashboard(username):
         #get general events data (most recent)
         query = """(Select EventID,EventName, OrgName, Tag, COALESCE(EventPopularity, 0) as EventPopularity  FROM Events join EventTags ON EventID=EventNum JOIN Organization USING (OrgID) ORDER BY EventID DESC LIMIT 10) """
         event_result = sendSQLQueryFetch(query)
-        print(event_result)
+
 
         #process event result: collapse event tags to be in single row
 
@@ -315,9 +315,21 @@ def user_dashboard(username):
     # Pass both username (UserID) and user's name to the template
     return render_template('user_dashboard.html', user_id=username, user_name=user_name, table_data=event_result,recommendations = recommendations)
 
-@app.route('/give_rating') #need userID and eventID
-def give_rating():
-    return render_template('rating.html')
+@app.route('/redirect_rating/<user_id>/<event_id>') #need userID and eventID
+def redirect_rating(event_id, user_id):
+    return render_template('rating.html', event_id=event_id, user_id=user_id)
+
+@app.route('/give_rating/<user_id>/<event_id>', methods=['POST']) #need userID and eventID
+def give_rating(event_id, user_id):
+    rate = request.form.get('numericRating')
+    comment = request.form.get('comment')
+
+    query = f"INSERT INTO Rating (EventIdentifier, UID, Rating,Comments) VALUES ({event_id}, {user_id},{rate},'{comment}')"
+    print(query)
+    sendSQLQueryModify(query=query) #QUERY DOESN'T WORKKKK
+
+    return redirect(url_for('user_dashboard', username=user_id))
+
 
 
 
