@@ -10,7 +10,7 @@ InstanceID: pineapplezone
 password: @[4OljDzhKbv*H$m
 '''
 
-# Replace these values with your GCP MySQL instance details
+
 host = "34.123.222.214"
 user = "root"
 password = "password"
@@ -273,7 +273,7 @@ def user_dashboard(username):
     try:
         cursor = connection.cursor()
         cursor.execute(query, (username,))
-        result = cursor.fetchone()  # Assuming username is unique and returns a single record
+        result = cursor.fetchone() 
         user_name = result[0] if result else "Unknown"
 
         #get general events data (most recent)
@@ -375,7 +375,7 @@ def rep_dashboard(repID):
     try:
         cursor = connection.cursor()
         cursor.execute(query, (repID,))
-        result = cursor.fetchone()  # Assuming username is unique and returns a single record
+        result = cursor.fetchone()  
         orgId = result[0] if result else "Unknown"
     except mysql.connector.Error as e:
         print(f"Database error: {e}")
