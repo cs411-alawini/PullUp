@@ -68,52 +68,52 @@
             color: #f2f2f2;
         }
         .signup-container {
-            /* Your existing styles here */
-            position: relative; /* Set position to relative */
+           
+            position: relative; 
             flex-direction: column;
         }
 
-        /* Styles for the search bar container */
+       
         .search-bar-container {
-            background-color: #f2f2f2; /* Background color for the search bar */
-            padding: 10px; /* Increase padding for larger size */
-            text-align: center; /* Center-align the search bar horizontally */
-            position: absolute; /* Set position to absolute */
-            top: 0; /* Position at the top */
-            left: 0; /* Position at the left */
-            width: 100%; /* Take up the full width of the container */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow */
+            background-color: #f2f2f2; 
+            padding: 10px; 
+            text-align: center; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
         }
 
-        /* Styles for the search bar input */
+        
         .search-bar-container input[type="text"] {
-            width: 300px; /* Increase the width for a larger input field */
-            padding: 10px; /* Increase padding for a larger input field */
-            font-size: 16px; /* Increase font size for better visibility */
-            border: 2px solid #ccc; /* Increase border thickness */
-            border-radius: 5px; /* Increase border radius */
-            margin-right: 10px; /* Add some right margin for spacing */
+            width: 300px; 
+            padding: 10px; 
+            font-size: 16px; 
+            border: 2px solid #ccc; 
+            border-radius: 5px;
+            margin-right: 10px; 
         }
 
-        /* Styles for the search button */
+      
         .search-bar-container button {
             background-color: red;
             color: white;
-            padding: 10px 20px; /* Increase padding for a larger button */
-            font-size: 16px; /* Increase font size for better visibility */
+            padding: 10px 20px; 
+            font-size: 16px; 
             border: none;
-            border-radius: 5px; /* Increase border radius */
+            border-radius: 5px; 
             cursor: pointer;
         }
         .search-bar-text {
-            display: inline-block; /* Display as inline block to appear next to the input */
-            margin-right: 10px; /* Add right margin for spacing */
-            font-weight: bold; /* Optionally make the text bold */
-            font-size: 18px; /* Optionally adjust font size */
+            display: inline-block; 
+            margin-right: 10px;
+            font-weight: bold; 
+            font-size: 18px; 
         }
         .selected-event-types {
-            max-height: 50px; /* Adjust the maximum height as needed */
-            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 50px; 
+            overflow-y: auto; 
             font-size: small;
         }
         .popup {
@@ -136,10 +136,10 @@
             position: absolute;
             top: 25%;
             right: 0%;
-            width: 500px; /* Adjust the width as needed */
-            height: 50%; /* Set the fixed height for scrolling */
+            width: 500px; 
+            height: 50%; 
             background-color: #f2f2f2;
-            overflow-y: auto; /* Enable vertical scrolling */
+            overflow-y: auto; 
             padding: 20px;
             border: 1px solid black;
         }
@@ -153,22 +153,22 @@
             margin-bottom: 10px;
         }
         .scrollable-list h3 {
-            margin-top: 0; /* Remove the default top margin of h4 */
-            text-align: center; /* Center-align the heading */
-            background-color: white; /* Background color for the heading */
-            padding: 10px 0; /* Add some padding for spacing */
-            border-bottom: 1px solid black; /* Add a black border at the bottom of the heading */
+            margin-top: 0; 
+            text-align: center; 
+            background-color: white; 
+            padding: 10px 0; 
+            border-bottom: 1px solid black; 
         }
         #eventTable {
-    border-collapse: collapse; /* Collapse borders for better styling */
-    width: 100%; /* Adjust the table width as needed */
+    border-collapse: collapse;
+    width: 100%;
 }
 
 #eventTable th,
 #eventTable td {
-    border: 2px solid #ccc; /* Add a 1px solid border to table cells */
-    padding: 8px; /* Add padding for cell content spacing */
-    text-align: left; /* Adjust text alignment as needed */
+    border: 2px solid #ccc; 
+    padding: 8px; 
+    text-align: left; 
 }
     </style>
 </head>
@@ -377,7 +377,7 @@
 
         function searchEvents() {
             var searchBar = document.getElementById('searchBar');
-            var orgID = '{{orgID}}'; // Replace with the actual orgID
+            var orgID = '{{orgID}}'; 
             console.log(searchBar.value, orgID)
             // Send a GET request to the "findEvents" route with orgID as a query parameter
             fetch(`/findEvents?orgID=${orgID}&search=${searchBar.value}`)
