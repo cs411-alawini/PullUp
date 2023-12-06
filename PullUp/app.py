@@ -1,6 +1,7 @@
 import os
 import pymysql
 from flask import Flask, jsonify, render_template, request, url_for, redirect, flash
+from collections import defaultdict
 import mysql.connector
 '''
 ClOUD_SQL_CONNECTION_NAME: cs411pineapple:us-central1:pineapplezone
@@ -275,7 +276,28 @@ def user_dashboard(username):
         event_result = sendSQLQueryFetch(query)
         print(event_result)
 
+        #process event result: collapse event tags to be in single row
+
+        event_map = defaultdict(str) #key = ID, val = tags (comma-separated)
+        seen = set() #im a tryhard
+        update_event_result = []
+
+        for tuple_index in range(len(event_result)):
+            current_tuple = event_result[tuple_index]
+            if current_tuple[0] in event_map:
+                event_map[current_tuple[0]] += f', {current_tuple[3]}'
+            else:
+                event_map[current_tuple[0]] += current_tuple[3] #no comma prepend
         
+        for tuple in event_result:
+            if tuple[0] in seen:
+                continue
+            update_tuple = tuple[:3] + (event_map[tuple[0]],) + tuple[4:]
+            update_event_result.append(update_tuple)
+            seen.add(tuple[0]) #EventID already added
+            
+        event_result = update_event_result
+
 
         #get recommended events data (preference + events tag comparison)
         cursor.callproc('GenerateEventRecommendationsV4', [username])

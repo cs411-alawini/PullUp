@@ -80,7 +80,7 @@
                 {% for row in table_data %}
                     <tr>
                         {% for value in row %}
-                            <td>{{ value, }}</td>
+                            <td>{{ value }}</td>
                         {% endfor %}
                         <td><a href="{{ url_for('give_rating') }}">Provide Rating</a></td>
                     </tr>
