@@ -132,9 +132,47 @@
         #popup-text {
             font-size: 16px;
         }
+        .scrollable-list {
+            position: absolute;
+            top: 25%;
+            right: 0%;
+            width: 500px; /* Adjust the width as needed */
+            height: 50%; /* Set the fixed height for scrolling */
+            background-color: #f2f2f2;
+            overflow-y: auto; /* Enable vertical scrolling */
+            padding: 20px;
+            border: 1px solid black;
+        }
+
+        .scrollable-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .scrollable-list li {
+            margin-bottom: 10px;
+        }
+        .scrollable-list h3 {
+            margin-top: 0; /* Remove the default top margin of h4 */
+            text-align: center; /* Center-align the heading */
+            background-color: white; /* Background color for the heading */
+            padding: 10px 0; /* Add some padding for spacing */
+            border-bottom: 1px solid black; /* Add a black border at the bottom of the heading */
+        }
+        #eventTable {
+    border-collapse: collapse; /* Collapse borders for better styling */
+    width: 100%; /* Adjust the table width as needed */
+}
+
+#eventTable th,
+#eventTable td {
+    border: 2px solid #ccc; /* Add a 1px solid border to table cells */
+    padding: 8px; /* Add padding for cell content spacing */
+    text-align: left; /* Adjust text alignment as needed */
+}
     </style>
 </head>
-<body>
+<body onload="searchEvents()">
     <div class="search-bar-container">
         <div class="search-bar-text">Find Current Events</div>
         <input type="text" id="searchBar" placeholder="Search...">
@@ -233,6 +271,22 @@
             <a href="/">Back to Home</a>
         </div>
     </div>
+    <div id="scrollableList" class="scrollable-list">
+        <h3>Current Events</h3>
+        <table id="eventTable">
+            <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Event Name</th>
+                    <th>Event Tags</th>
+                    <th>Event Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Event rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
 
     <script>
         {% if succ %}
@@ -322,8 +376,51 @@
         }
 
         function searchEvents() {
-            val = document.getElementById('searchBar').val;
-            // send request to some route to get something?
+            var searchBar = document.getElementById('searchBar');
+            var orgID = '{{orgID}}'; // Replace with the actual orgID
+            console.log(searchBar.value, orgID)
+            // Send a GET request to the "findEvents" route with orgID as a query parameter
+            fetch(`/findEvents?orgID=${orgID}&search=${searchBar.value}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the retrieved data and update the event list
+                    displayEvents(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        function displayEvents(eventsData) {
+            var eventTable = document.getElementById('eventTable');
+            var tbody = eventTable.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear the existing table body
+
+            // Iterate through the eventsData and create rows for each event
+            eventsData.forEach(event => {
+                var row = document.createElement('tr');
+            
+                // Create and populate cells for each column
+                var eventIDCell = document.createElement('td');
+                eventIDCell.textContent = event.eventID;
+            
+                var eventNameCell = document.createElement('td');
+                eventNameCell.textContent = event.eventName;
+            
+                var eventTagsCell = document.createElement('td');
+                eventTagsCell.textContent = event.eventTags;
+            
+                var eventLocationCell = document.createElement('td');
+                eventLocationCell.textContent = event.eventLocation;
+            
+                // Append cells to the row
+                row.appendChild(eventIDCell);
+                row.appendChild(eventNameCell);
+                row.appendChild(eventTagsCell);
+                row.appendChild(eventLocationCell);
+            
+                // Append the row to the table body
+                tbody.appendChild(row);
+            });
         }
     </script>
 </body>

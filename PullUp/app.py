@@ -158,9 +158,14 @@ def register_rep_old_org():
         # login exists so add to rep // assuming repcontact string
         query = f"INSERT INTO Representative (OrgID, Name, Contact) VALUES ({orgId}, '{repName}', '{repContact}')"
         sendSQLQueryModify(query=query)
-
+        query = """
+        SELECT RepID 
+        FROM Representative
+        ORDER BY RepID DESC LIMIT 1
+        """
+        repID = sendSQLQueryFetch(query)[0][0]
         # assuming we wanna pass something here? idk rep page
-        return render_template('rep_setting.html')
+        return render_template('rep_setting.html', repID=repID, orgID=orgId)
 
 @app.route('/register_rep_new_org', methods=['POST'])
 def register_rep_new_org():
@@ -448,6 +453,7 @@ def rep_new_org():
 @app.route('/rep_old_org', methods=['POST'])
 def rep_old_org():
     # Handle representative signup logic here
+    print("ASD")
     return render_template('signup_rep_existing.html')
 
 @app.route('/event_success/<repID>', methods=['GET'])
@@ -487,3 +493,24 @@ def dummy():
     rows = sendSQLQueryFetch(q)
     print(rows)
     return render_template('index.html')
+
+@app.route('/findEvents', methods=['GET'])
+def findEvents():
+    print("finding events")
+    org_id = request.args.get('orgID')
+    search_query = request.args.get('search')
+    print(f"{org_id} {search_query}")
+    query = f'''
+    SELECT  et.EventName AS eventname, e.EventID AS eventid, GROUP_CONCAT(et.Tag) AS eventtags, e.Location AS eventlocation
+    FROM Events e 
+    LEFT JOIN EventTags et 
+    ON e.EventID = et.EventNum
+    WHERE e.OrgID = {org_id} AND et.EventName LIKE '{search_query}%'
+    GROUP BY e.EventID, et.EventName, e.Location;
+    '''
+    res = sendSQLQueryFetch(query)
+    lis = []
+    for event in res:
+        lis.append({'eventID': event[1], 'eventName':event[0], 'eventTags':event[2], 'eventLocation':event[3]})
+    return lis
+
