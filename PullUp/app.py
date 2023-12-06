@@ -426,7 +426,7 @@ def rep_dashboard(repID):
         return render_template('rep_setting.html', repID=repID, orgID = orgId ,succ=request.args['success'])
     elif 'badd' in request.args:
         print("bad")
-        return render_template('rep_setting.html', repID=repID, badd=request.args['badd'])
+        return render_template('rep_setting.html', repID=repID, orgID = orgId, badd=request.args['badd'])
     else:
         print("idk what this is")
         return render_template('rep_setting.html', repID=repID, orgID = orgId)
@@ -509,6 +509,8 @@ def findEvents():
     GROUP BY e.EventID, et.EventName, e.Location;
     '''
     res = sendSQLQueryFetch(query)
+    if not res or len(res) == 0:
+        return []
     lis = []
     for event in res:
         lis.append({'eventID': event[1], 'eventName':event[0], 'eventTags':event[2], 'eventLocation':event[3]})
