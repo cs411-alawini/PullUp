@@ -79,6 +79,10 @@
             <div class="submitbtn_container">
                 <button type="submit" class="btn">Submit Rating</button>
             </div>
+            {% if flag %}
+            <p>You already reviewed this event</p>
+            {% endif %}
+            <a href="{{ url_for('user_dashboard', username=user_id) }}">Back to Home</a>
         </form>
     </div>
 </body>

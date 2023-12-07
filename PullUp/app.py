@@ -324,14 +324,24 @@ def user_dashboard(username):
 def redirect_rating(event_id, user_id):
     return render_template('rating.html', event_id=event_id, user_id=user_id)
 
-@app.route('/give_rating/<user_id>/<event_id>', methods=['POST']) #need userID and eventID
+@app.route('/give_rating/<user_id>/<event_id>', methods=['POST', 'GET']) #need userID and eventID
 def give_rating(event_id, user_id):
     rate = request.form.get('numericRating')
     comment = request.form.get('comment')
 
-    query = f"INSERT INTO Rating (EventIdentifier, UID, Rating,Comments) VALUES ({event_id}, {user_id},{rate},'{comment}')"
-    print(query)
-    sendSQLQueryModify(query=query) #QUERY DOESN'T WORKKKK
+    check_if_rating_exists_query = f"""SELECT * FROM Rating WHERE UID = {user_id} AND EventIdentifier = {event_id}"""
+    rating_exists_response = sendSQLQueryFetch(query = check_if_rating_exists_query)
+    flag = False
+
+
+    if len(rating_exists_response) == 0: #insert if not exist 
+        query = f"INSERT INTO Rating (EventIdentifier, UID, Rating,Comments) VALUES ({event_id}, {user_id},{rate},'{comment}')"
+        sendSQLQueryModify(query=query)
+    else: #prevent insert
+        flag = True
+        return render_template('rating.html', event_id=event_id, user_id=user_id,flag=flag)
+        
+
 
     return redirect(url_for('user_dashboard', username=user_id))
 
